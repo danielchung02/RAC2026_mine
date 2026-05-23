@@ -13,7 +13,7 @@ import gi
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GLib
 
-from .detectors import ArucoDetector
+#from .detectors import ArucoDetector
 from .detectors import YoloDetector
 from .pipeline import VideoPipelineBase, SIYIPipeline, GazeboPipeline
 
@@ -43,7 +43,8 @@ class VisionProcessorNode(Node):
         self.camera_fov_w = 80 # degrees
         self.camera_fov_h = 80*9/16 # degrees
 
-        self.aruco_detector = ArucoDetector()
+        #self.aruco_detector = ArucoDetector()
+        self.yolo_detector = YoloDetector()
 
     def setup_ros2(self):
         self.aircraft_state_subscriber = self.create_subscription(
@@ -77,8 +78,8 @@ class VisionProcessorNode(Node):
         self.aircraft_state = msg
 
     def _main_timer_callback(self):
-        self.aircraft_state = AircraftState
-        self.aircraft_state.track_type = AircraftState.TRACK_ARUCO
+        self.aircraft_state = AircraftState() #()로 실행해야하지 않나?
+        self.aircraft_state.track_type = AircraftState.TRACK_ARUCO #이거 이름은 아직 안 바꿨음
         start_time = 0
         end_time = 0
 
@@ -96,7 +97,7 @@ class VisionProcessorNode(Node):
             case AircraftState.TRACK_PATIENT:
                 pass
             case AircraftState.TRACK_ARUCO:
-                detection = self.aruco_detector.detect(self.frame)
+                detection = self.yolo_detector.detect(self.frame)
                 if detection is not None:
                     self.tracked_object  = CameraTrackedObject()
                     cv.circle(self.frame, (int(detection[0]), int(detection[1])), 50, (0, 0, 255), 15)
@@ -144,4 +145,3 @@ def main(args=None):
 if __name__ == "__main__":
     main()
 
-#i will change this code
