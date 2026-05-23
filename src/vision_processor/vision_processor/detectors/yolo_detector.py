@@ -1,8 +1,12 @@
 # detectors/yolo_detector.py
+import os
 from ultralytics import YOLO
 
 class YoloDetector:
     def __init__(self, model_path="best.pt"):
+        if model_path is None:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            model_path = os.path.join(current_dir, '..', 'models', 'best.pt')
         self.model = YOLO(model_path)
         
     def detect(self, frame):
