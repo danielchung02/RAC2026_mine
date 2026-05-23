@@ -14,6 +14,7 @@ gi.require_version('Gst', '1.0')
 from gi.repository import Gst, GLib
 
 from .detectors import ArucoDetector
+from .detectors import YoloDetector
 from .pipeline import VideoPipelineBase, SIYIPipeline, GazeboPipeline
 
 class VisionProcessorNode(Node):

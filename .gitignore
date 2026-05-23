@@ -6,3 +6,5 @@ __pycache__/
 PX4-Autopilot/
 
 flight_logs/*
+venv/
+*.pt
